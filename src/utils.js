@@ -38,3 +38,11 @@ export const passporCall = (strategy) => {
         })(req, res, next) //esto es una funcion iife , funcion declarada y ejecutada inmnediatamente (Immediately Invoked Function Expression)
     }
 }
+
+export const authorization = role => {
+    return async (req, res, next) => {
+        if (!req.user) return res.status(401).json({ error: 'Unauthorized'})
+        if (req.user.user.role != role) return res.status(403).json({ error: 'No permission'})
+        next()
+    }
+}

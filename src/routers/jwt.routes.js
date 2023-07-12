@@ -1,9 +1,10 @@
 import { Router } from "express";
 import passport from "passport";
-import { generateToken, authToken, passporCall } from "../utils.js";
+import { generateToken, authToken, passporCall, authorization } from "../utils.js";
 
 const router = Router()
-const users = [{ email: 'javypier1@gmail.com', password: 'q1w2e3r4' }] //almacenamiento en memoria
+const users = [ { email: 'javypier1@gmail.com', password: 'q1w2e3r4', role: 'admin' },
+                { email: 'user@gmail.com', password: 'q1w2e3r4', role: 'user' }] //almacenamiento en memoria
 
 router.post('/register', (req, res) => {
     const user = req.body
@@ -28,8 +29,9 @@ router.post('/login', (req, res) => {
     /* res.json({message: 'ok! estas dentro de la sección privada.'}) */
 
 
-router.get('/private', passporCall('jwt'), (req ,res) => { //quita la opcion para que se grabe tambien en una session, asi se hace solo con jwt
+router.get('/private', passporCall('jwt'), authorization('admin'), (req ,res) => { //quita la opcion para que se grabe tambien en una session, asi se hace solo con jwt
     res.json({status: 'success', payload: req.user})
 })
+
 
 export default router
