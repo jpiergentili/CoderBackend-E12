@@ -1,5 +1,6 @@
 import { Router } from "express";
-import { generateToken, authToken } from "../utils.js";
+import passport from "passport";
+import { generateToken, authToken, passporCall } from "../utils.js";
 
 const router = Router()
 const users = [{ email: 'javypier1@gmail.com', password: 'q1w2e3r4' }] //almacenamiento en memoria
@@ -23,8 +24,12 @@ router.post('/login', (req, res) => {
     res.cookie('mercadoliebre', access_token).json({status: 'success'}) //guardo el accesstoken en una cookie
 })
 
-router.get('/private', authToken, (req ,res) => {
-    res.json({message: 'ok! estas dentro de la sección privada.'})
+/* router.get('/private', authToken, (req ,res) => { */
+    /* res.json({message: 'ok! estas dentro de la sección privada.'}) */
+
+
+router.get('/private', passporCall('jwt'), (req ,res) => { //quita la opcion para que se grabe tambien en una session, asi se hace solo con jwt
+    res.json({status: 'success', payload: req.user})
 })
 
 export default router
