@@ -23,4 +23,8 @@ router.post('/login', (req, res) => {
     res.cookie('mercadoliebre', access_token).json({status: 'success'}) //guardo el accesstoken en una cookie
 })
 
+router.get('/private', authToken, (req ,res) => {
+    res.json({message: 'ok! estas dentro de la sección privada.'})
+})
+
 export default router
